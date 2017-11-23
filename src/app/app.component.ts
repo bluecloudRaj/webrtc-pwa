@@ -212,7 +212,7 @@ export class AppComponent implements OnInit  {
     let self = this;
     let turnExists = false;
     for (var i in this.pcConfig.iceServers) {
-      if (this.pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
+      if (this.pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
         turnExists = true;
         this.turnReady = true;
         break;
