@@ -5,8 +5,9 @@ const os = require('os');
 let index = require('./svr/index');
 
 var http = require('http').Server(index);
-http.listen(3000, function () {
-    console.log('listening on *:3000');
+
+app.listen(process.env.PORT || 3000, function () {
+    console.log('listening at 3000');
 });
 
 
