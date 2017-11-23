@@ -7,6 +7,9 @@ let index = require('./svr/index');
 var http = require('http').Server(index);
 
 
+index.listen(process.env.PORT || 3000, function () {
+    console.log('listening at 3000');
+});
 
 
 let socketIO = require('socket.io');
@@ -66,8 +69,4 @@ io.sockets.on('connection', function (socket) {
         console.log('received bye');
     });
 
-});
-
-http.listen(process.env.PORT || 3000, function () {
-    console.log('listening at 3000');
 });
