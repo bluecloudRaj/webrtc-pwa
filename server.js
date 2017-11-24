@@ -13,5 +13,5 @@ const server = express()
     .use(express.static(path.join(__dirname, './dist')))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-const io = socketIO(server);
+
 
