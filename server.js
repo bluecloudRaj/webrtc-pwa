@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
 
-let port = process.env.PORT || 1439;
-http.listen(port);
+app.listen(process.env.PORT || 3000, function () {
+    console.log('listening at 3000');
+});
 
