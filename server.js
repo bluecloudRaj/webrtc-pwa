@@ -10,4 +10,3 @@ var server=app.use(compression()).use(express.static(path.join(__dirname, './dis
 .use(bodyParser.urlencoded({ extended: false })).use(bodyParser.json()).listen(process.env.PORT || 3000);
 
 
-const io = socketIO(server);
