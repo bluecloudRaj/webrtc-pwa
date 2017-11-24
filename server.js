@@ -5,13 +5,13 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+
 
 
 
 
 server.listen(process.env.PORT || 3000);
-
+var io = require('socket.io')(server);
 
 io.sockets.on('connection', function (socket) {
 
