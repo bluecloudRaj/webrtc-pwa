@@ -4,14 +4,17 @@ var app = express();
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
-var server = require('http').Server(app);
+var socketIO=require('socket.io');
 
+var INDEX = path.join(__dirname, './dist');
+var PORT = process.env.PORT || 3000;
 
+const server = express()
+    .use(express.static(path.join(__dirname, './dist')))
+    .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
+const io = socketIO(server);
 
-
-server.listen(process.env.PORT || 3000);
-var io = require('socket.io')(server);
 
 io.sockets.on('connection', function (socket) {
 
@@ -66,5 +69,3 @@ io.sockets.on('connection', function (socket) {
     });
 
 });
-
-
