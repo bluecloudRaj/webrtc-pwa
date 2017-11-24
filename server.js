@@ -4,8 +4,6 @@ var app = express();
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
-var server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
 
 
 app.use(compression());
@@ -15,8 +13,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-server.listen(process.env.PORT || 3000);
+var server= app.listen(process.env.PORT || 3000);
 
+var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
 
