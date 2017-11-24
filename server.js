@@ -4,7 +4,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
-var server = require('http').createServer(app);
+var server = require('http').createServer(app),
+    io = require('socket.io').listen(server);
 
 
 app.use(compression());
