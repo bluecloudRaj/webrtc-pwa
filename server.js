@@ -3,19 +3,14 @@ var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
 var compression = require('compression');
+var socketIO = require('socket.io');
 
 
+var server=app.use(compression()).use(express.static(path.join(__dirname, './dist')))
+.use(bodyParser.urlencoded({ extended: false })).use(bodyParser.json()).listen(process.env.PORT || 3000);
 
-app.use(compression());
-app.use(express.static(path.join(__dirname, './dist')));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(bodyParser.json());
-
-var server= app.listen(process.env.PORT || 3000);
-
-var io = require('socket.io').listen(server);
+const io = socketIO(server);
 
 io.sockets.on('connection', function (socket) {
 
