@@ -26,7 +26,7 @@ export class AppComponent implements OnInit  {
     offerToReceiveAudio: true,
     offerToReceiveVideo: true
   };
-  room = 'foo';
+  room = 'foo0';
   socket;
   constructor() {
     this.socket = io.connect();

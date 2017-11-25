@@ -76,7 +76,7 @@ var AppComponent = (function () {
             offerToReceiveAudio: true,
             offerToReceiveVideo: true
         };
-        this.room = 'foo';
+        this.room = 'foo0';
         this.constraints = {
             video: true
         };
