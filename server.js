@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const socketIO = require('socket.io');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
@@ -12,4 +11,4 @@ const server = express()
     .use((req, res) => res.sendFile(INDEX))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
