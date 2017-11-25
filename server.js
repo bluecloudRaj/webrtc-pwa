@@ -1,18 +1,15 @@
-var express = require('express');
-var path = require('path');
-var app = express();
-var bodyParser = require('body-parser');
-var compression = require('compression');
+'use strict';
 
-var server = require('http').Server(app);
+const express = require('express');
+const socketIO = require('socket.io');
+const path = require('path');
 
+const PORT = process.env.PORT || 3000;
+const INDEX = path.join(__dirname, 'index.html');
 
-app.use(compression());
-app.use(express.static(path.join(__dirname, './dist')));
+const server = express()
+    .use(express.static(path.join(__dirname, './dist')))
+    .use((req, res) => res.sendFile(INDEX))
+    .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(bodyParser.json());
-
-server.listen(process.env.PORT || 3000);
-
+var io = require('socket.io').listen(server);
