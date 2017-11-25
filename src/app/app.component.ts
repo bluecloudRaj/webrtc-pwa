@@ -41,11 +41,11 @@ export class AppComponent implements OnInit  {
     let self = this;
     self.localVideo = document.querySelector('#localVideo');
     self.remoteVideo = document.querySelector('#remoteVideo');
-    if (window.location.hostname !== 'localhost') {
-      self.requestTurn(
-        'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-      );
-    }
+    // if (window.location.hostname !== 'localhost') {
+    //   self.requestTurn(
+    //     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
+    //   );
+    // }
     
     window.navigator.mediaDevices.getUserMedia({
       audio: false,
