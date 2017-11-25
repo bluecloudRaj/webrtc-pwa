@@ -6,6 +6,8 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
+const socketIO = require('socket.io');
+
 const server = express()
     .use(express.static(path.join(__dirname, './dist')))
     .use((req, res) => res.sendFile(INDEX))
