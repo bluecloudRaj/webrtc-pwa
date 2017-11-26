@@ -3,13 +3,14 @@
 const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
-
+var app = express();
+var bodyParser=require('body-parser');
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
-const server = express()
+const server = app
+    .use(bodyParser())
     .use(express.static(path.join(__dirname, './dist')))
-    .use((req, res) => res.sendFile(INDEX))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
@@ -19,10 +20,13 @@ const authToken = '09be98a81da7f85bc1e5d2d93bef95e5';
 
 const client = require('twilio')(accountSid, authToken);
 
-
-client.tokens.create({}, function (err, token) {
-    console.log(token);
-});
+app.use('/getICETokens', function (req, res) {
+    client.tokens.create({}, function (err, token) {
+        console.log(token)
+        var response = JSON.parse(JSON.stringify(token.iceServers));
+        res.send(response);
+    });
+})
 
 io.sockets.on('connection', function (socket) {
 

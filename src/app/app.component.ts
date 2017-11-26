@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import * as io from 'socket.io-client';
-
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 declare var window :any;
 
 @Component({
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit  {
   };
   room = 'foo0';
   socket;
-  constructor() {
+  constructor(private http: Http) {
     this.socket = io.connect();
   }
 
@@ -36,9 +37,23 @@ export class AppComponent implements OnInit  {
   // @ViewChild('remoteVideo') remoteVideo;
   localVideo;
   remoteVideo;
+  tokens:any;
 
   ngOnInit () {
+    
     let self = this;
+    let tokens=this.http.get('/getICETokens')
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    tokens.subscribe(x=>{
+      
+      self.tokens = x;
+      self.setConnection();
+    });
+  }
+
+  setConnection(){
+    let self=this;
     self.localVideo = document.querySelector('#localVideo');
     self.remoteVideo = document.querySelector('#remoteVideo');
     // if (window.location.hostname !== 'localhost') {
@@ -46,15 +61,15 @@ export class AppComponent implements OnInit  {
     //     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
     //   );
     // }
-    
+
     window.navigator.mediaDevices.getUserMedia({
       audio: false,
       video: true
     })
-    .then(self.gotStream.bind(self))
-    .catch(function (e) {
-      console.log(e);
-    });
+      .then(self.gotStream.bind(self))
+      .catch(function (e) {
+        console.log(e);
+      });
 
 
     window.onbeforeunload = function () {
@@ -148,23 +163,7 @@ export class AppComponent implements OnInit  {
 
   createPeerConnection() {
     try {
-      var config:any = [{ url: 'stun:global.stun.twilio.com:3478?transport=udp' },
-      {
-        url: 'turn:global.turn.twilio.com:3478?transport=udp',
-        username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-        credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-      },
-      {
-        url: 'turn:global.turn.twilio.com:3478?transport=tcp',
-        username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-        credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-      },
-      {
-        url: 'turn:global.turn.twilio.com:443?transport=tcp',
-        username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-        credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-      }];
-      var configuration = { iceServers: config };
+      var configuration = { iceServers: this.tokens };
       this.pc = new RTCPeerConnection(configuration);
       this.pc.onicecandidate = this.handleIceCandidate.bind(this);
       this.pc.onaddstream = this.handleRemoteStreamAdded.bind(this);

@@ -50,6 +50,8 @@ module.exports = "<div id=\"videos\">\n  <div>\n    <video id=\"localVideo\" aut
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client__ = __webpack_require__("../../../../socket.io-client/lib/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_socket_io_client__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -61,8 +63,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(http) {
+        this.http = http;
         this.title = 'app';
         this.isChannelReady = false;
         this.isInitiator = false;
@@ -83,6 +88,16 @@ var AppComponent = (function () {
         this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__["connect"]();
     }
     AppComponent.prototype.ngOnInit = function () {
+        var self = this;
+        var tokens = this.http.get('/getICETokens')
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__["a" /* Observable */].throw(error.json().error || 'Server error'); });
+        tokens.subscribe(function (x) {
+            self.tokens = x;
+            self.setConnection();
+        });
+    };
+    AppComponent.prototype.setConnection = function () {
         var self = this;
         self.localVideo = document.querySelector('#localVideo');
         self.remoteVideo = document.querySelector('#remoteVideo');
@@ -179,23 +194,7 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.createPeerConnection = function () {
         try {
-            var config = [{ url: 'stun:global.stun.twilio.com:3478?transport=udp' },
-                {
-                    url: 'turn:global.turn.twilio.com:3478?transport=udp',
-                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-                },
-                {
-                    url: 'turn:global.turn.twilio.com:3478?transport=tcp',
-                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-                },
-                {
-                    url: 'turn:global.turn.twilio.com:443?transport=tcp',
-                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
-                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
-                }];
-            var configuration = { iceServers: config };
+            var configuration = { iceServers: this.tokens };
             this.pc = new RTCPeerConnection(configuration);
             this.pc.onicecandidate = this.handleIceCandidate.bind(this);
             this.pc.onaddstream = this.handleRemoteStreamAdded.bind(this);
@@ -370,7 +369,7 @@ var AppComponent = (function () {
             template: __webpack_require__("../../../../../src/app/app.component.html"),
             styles: [__webpack_require__("../../../../../src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Http */]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -386,7 +385,8 @@ var AppComponent = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -396,19 +396,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["E" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]
+                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */]
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* HttpModule */]
             ],
             providers: [],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
