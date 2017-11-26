@@ -63,7 +63,7 @@ export class AppComponent implements OnInit  {
     // }
 
     window.navigator.mediaDevices.getUserMedia({
-      audio: false,
+      audio: true,
       video: true
     })
       .then(self.gotStream.bind(self))
