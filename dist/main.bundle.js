@@ -179,7 +179,24 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.createPeerConnection = function () {
         try {
-            this.pc = new RTCPeerConnection(null);
+            var config = [{ url: 'stun:global.stun.twilio.com:3478?transport=udp' },
+                {
+                    url: 'turn:global.turn.twilio.com:3478?transport=udp',
+                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
+                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
+                },
+                {
+                    url: 'turn:global.turn.twilio.com:3478?transport=tcp',
+                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
+                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
+                },
+                {
+                    url: 'turn:global.turn.twilio.com:443?transport=tcp',
+                    username: '54d35fc74d93646a24058009bf953dc3ae4111fd1ade68915e0c3be73f72633c',
+                    credential: 'seH0jBJvc+AojCjD8ZeIl/2d2QuwTLs+lGKiBLKTZNI='
+                }];
+            var configuration = { iceServers: config };
+            this.pc = new RTCPeerConnection(configuration);
             this.pc.onicecandidate = this.handleIceCandidate.bind(this);
             this.pc.onaddstream = this.handleRemoteStreamAdded.bind(this);
             this.pc.onremovestream = this.handleRemoteStreamRemoved.bind(this);

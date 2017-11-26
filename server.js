@@ -14,6 +14,16 @@ const server = express()
 
 const io = socketIO(server);
 
+const accountSid = 'AC8567f370ce182917f4ff253b07e9a303';
+const authToken = '09be98a81da7f85bc1e5d2d93bef95e5';
+
+const client = require('twilio')(accountSid, authToken);
+
+
+client.tokens.create({}, function (err, token) {
+    console.log(token);
+});
+
 io.sockets.on('connection', function (socket) {
 
     // convenience function to log server messages on the client

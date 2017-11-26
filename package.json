@@ -25,11 +25,12 @@
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
     "core-js": "^2.4.1",
+    "express": "4.13.4",
     "firebase": "^4.6.2",
     "rxjs": "^5.5.2",
-    "express": "4.13.4",
     "socket.io": "1.4.6",
     "socket.io-client": "^2.0.4",
+    "twilio": "^3.10.0",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
